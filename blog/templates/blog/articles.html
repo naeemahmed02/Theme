@@ -1,0 +1,120 @@
+{% extends 'blog/main.html' %}
+
+{% block title %}Articles{% endblock %}
+
+{% block content %}
+<div class="content overflow-hidden">
+  <div class="dark:bg-slate-800 dark:text-gray-300">
+    <section class="text-gray-600 dark:text-gray-300 body-font">
+      <div class="container md:px-8 px-2 py-10 mx-auto">
+        <section class="body-font">
+          <div class="flex flex-col text-center w-full py-10">
+            <h1
+              class="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
+              All Articles
+            </h1>
+          </div>
+          <div class="relative max-w-lg mx-auto">
+            <form action="" method="GET">
+              <input name="q" id="search" value="{{ request.GET.q }}" type="text" placeholder="Search articles"
+                class="block w-full px-4 py-2 text-gray-900 bg-white border border-gray-300 rounded-md dark:border-gray-900 focus:ring-primary-500 focus:border-primary-500 dark:bg-slate-900 dark:text-gray-100">
+              <svg class="absolute w-5 h-5 text-gray-400 right-3 top-3 dark:text-gray-300"
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+            </form>
+          </div>
+        </section>
+
+        {% if page_obj.object_list %}
+        <div class="flex flex-wrap -m-4">
+          <div class="flex xl:max-w-4xl px-8 py-10 mx-auto flex-wrap -m-4">
+            <ul class="divide-y divide-gray-300 dark:divide-gray-600">
+              {% for article in page_obj.object_list %}
+              <li class="py-12">
+                {% for category in article.categories.all %}
+                <a href="#">
+                  <span
+                    class="inline-block py-1 px-3 rounded bg-emerald-100 mb-3 text-emerald-500 dark:bg-slate-700 dark:text-gray-300 text-xs font-medium tracking-widest">{{ category }}</span>
+                </a>
+                {% endfor %}
+                <h2 class="text-2xl font-bold leading-8 tracking-tight">
+                  <a class="text-gray-900 dark:text-gray-100" href="{% url 'single-post' article.slug %}">{{ article.title }}</a>
+                </h2>
+                <div class="mt-5">{{ article.content|striptags|slice:':300'|safe }}…</div>
+                <div class="text-base font-medium mt-5 leading-6">
+                  <a class="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
+                    href="{% url 'single-post' article.slug %}">Read more →</a>
+                  <p class="text-sm float-right font-medium leading-6 text-gray-500 dark:text-gray-400">
+                    {{ article.read_time }} min read</p>
+                </div>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+          
+        </div>
+        {% else %}
+        {% include 'blog/nothing_found.html' %}
+        {% endif %}
+        <!-- Pagination -->
+        <div class="flex justify-between items-center mt-16">
+          <!-- Previous Button -->
+          {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"
+            class="flex items-center px-4 py-2 text-white bg-emerald-600 border-0 focus:outline-none hover:bg-emerald-500 rounded text-lg transition">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            Previous
+          </a>
+          {% else %}
+          <span class="flex items-center px-4 py-2 text-gray-400 bg-gray-200 rounded text-lg">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            Previous
+          </span>
+          {% endif %}
+
+          <!-- Page Numbers -->
+          <div class="flex space-x-2">
+            {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+            <span class="px-4 py-2 text-white bg-emerald-600 rounded text-lg">{{ num }}</span>
+            {% else %}
+            <a href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"
+              class="px-4 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded text-lg transition">{{ num }}</a>
+            {% endif %}
+            {% endfor %}
+          </div>
+
+          <!-- Next Button -->
+          {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"
+            class="flex items-center px-4 py-2 text-white bg-emerald-600 border-0 focus:outline-none hover:bg-emerald-500 rounded text-lg transition">
+            Next
+            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </a>
+          {% else %}
+          <span class="flex items-center px-4 py-2 text-gray-400 bg-gray-200 rounded text-lg">
+            Next
+            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </span>
+          {% endif %}
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+{% endblock %}

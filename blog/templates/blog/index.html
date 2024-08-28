@@ -1,0 +1,68 @@
+{% extends 'blog/main.html' %}
+{% load static %} 
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <!-- Hero Section -->
+    <div class="content overflow-hidden">
+        <div class="dark:bg-slate-800 dark:text-gray-300">
+          <section class="text-gray-600 body-font bg-white dark:bg-slate-900">
+            <div class="container mx-auto flex md:px-24 md:py-10 md:flex-row flex-col items-center">
+              <div class="lg:flex-grow mt-5 md:mt-0 md:w-1.5/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
+                <h1 class="text-2xl font-extrabold leading-9 tracking-tight mb-3 text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-5xl md:leading-normal">Django Things</h1>
+                <p class="mb-8 md:pl-0 pl-2 pr-2 leading-relaxed dark:text-gray-300"><strong>Your Ultimate Destination for Django Mastery!</strong> From Cutting-Edge Tutorials to Expert Insights, We Deliver Top-Quality Content to Elevate Your Django Development Skills. Join Our Community and Stay Ahead in the World of Django with In-Depth Articles and Practical Guides.</p>
+                <div class="flex justify-center">
+                  <a href="{% url 'django-projects' %}" class="inline-flex text-white bg-emerald-600 border-0 py-2 px-6 focus:outline-none hover:bg-emerald-700 rounded text-lg">Django Projects</a>
+                  <a href="{% url 'articles' %}" class="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg">Read Articles</a>
+                </div>
+              </div>
+              <div class="lg:max-w-lg lg:w-full mb-5 md:mb-0 md:w-1/2 w-3/6">
+                <img class="object-cover object-center rounded" src="{% static 'images/djangocentral_hero.svg' %}" alt="hero">
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+        
+    <!-- Hero Section end -->
+
+    <!-- Blog Section start -->
+    <section class="body-font bg-gray-50 dark:bg-slate-800">
+        <div class="container px-5 py-24 mx-auto">
+          <div class="flex flex-col text-center w-full mb-20">
+            <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900 dark:text-gray-100">Latest articles</h1>
+            <p class="lg:w-2/3 mx-auto leading-relaxed text-base dark:text-gray-300">Read the latest from djangothings</p>
+          </div>
+          <div class="flex flex-wrap -m-4">
+            <div class="flex xl:max-w-4xl px-8 py-10 mx-auto flex-wrap -m-4">
+              <ul class="divide-y divide-gray-300 dark:divide-gray-600">
+                {% for post in posts %}
+                <li class="py-12">
+                {% for category in post.categories.all %}
+                <a href="#">
+                    <span class="inline-block py-1 px-3 rounded bg-emerald-100 mb-3 text-emerald-500 dark:bg-slate-700 dark:text-gray-300 text-xs font-medium tracking-widest">{{ category }}</span>
+                </a>
+                {% endfor %}
+                  <h2 class="text-2xl font-bold leading-8 tracking-tight">
+                    <a class="text-gray-900 dark:text-gray-100" href="{% url 'single-post' post.slug %}">{{ post.title }}</a>
+                  </h2>
+                  <div class="mt-5">{{ post.content| striptags|slice:':300'|safe }}…</div>
+                  <div class="text-base font-medium mt-5 leading-6">
+                    <a class="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400" href="{% url 'single-post' post.slug %}">Read more →</a>
+                    <p class="text-sm float-right font-medium leading-6 text-gray-500 dark:text-gray-400">{{post.read_time}} min read</p>
+                  </div>
+                </li>
+                {% endfor %}
+                <!-- Repeat the same structure for other articles -->
+              </ul>
+            </div>
+          </div>
+          <div class="mx-auto max-w-xs">
+            <a href="{% url 'articles' %}" class="px-8 py-2 mt-16 text-white bg-emerald-600 border-0 focus:outline-none hover:bg-emerald-600 rounded text-lg">view all</a>
+          </div>
+        </div>
+      </section>
+      
+    <!-- Blog Section end -->
+{% endblock %}

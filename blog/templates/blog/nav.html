@@ -1,0 +1,26 @@
+<div class="w-full sticky top-0 z-50 text-gray-700 bg-white dark:text-white dark:bg-slate-900">
+  <div x-data="{ open: false }" class="flex flex-col max-w-screen-xl px-2 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
+      <div class="p-4 flex flex-row items-center justify-between">
+          <a href="/" class="flex title-font font-medium items-center text-gray-900">
+              <!-- Django-like Logo -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24">
+                <!-- Rounded background -->
+                <rect x="2" y="2" width="20" height="20" rx="10" ry="10" fill="#2F855A"/>
+                <!-- Text centered -->
+                <text x="50%" y="54%" font-size="10" text-anchor="middle" dy=".3em" fill="#FFFFFF" font-family="Arial" font-weight="bold">DT</text>
+              </svg>
+              <span class="ml-3 font-bold text-xl dark:text-gray-100">Djangothings</span>
+          </a>
+          <button aria-label="mobile-menu" class="md:hidden rounded-lg focus:outline-none focus:shadow-outline" @click="open = !open">
+              <svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
+                  <path x-show="!open" fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM9 15a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                  <path x-show="open" fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+              </svg>
+          </button>
+      </div>
+      <nav :class="{'flex': open, 'hidden': !open}" class="flex-col flex-grow pb-4 md:pb-0 hidden md:flex md:justify-end md:flex-row">
+          <a class="md:mt-0 mt-3 px-3 py-2" href="{% url 'articles' %}">Articles</a>
+          <a class="md:mt-0 mt-3 px-3 py-2" href="{% url 'django-projects' %}">Projects</a>
+      </nav>
+  </div>
+</div>
